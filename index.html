@@ -1,46 +1,40 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-
+<meta charset="UTF-8">
 <title>DreamPriceDeals</title>
 
 <style>
 
 body{
 font-family:Arial;
-background:#f5f5f5;
+background:#f4f4f4;
 text-align:center;
-padding:40px;
+margin:0;
 }
 
-.brand{
-font-size:42px;
-font-weight:900;
-letter-spacing:1px;
-color:#222;
-margin-bottom:20px;
+h1{
+font-size:48px;
+margin-top:40px;
 }
 
 .brand span{
-color:#28a745;
+color:#2ecc71;
 }
 
-.section-title{
-font-size:28px;
-margin-top:20px;
-margin-bottom:20px;
+.hot-title{
 color:#ff3b30;
-font-weight:bold;
+font-size:28px;
+margin-top:10px;
 }
 
-.search-box{
-margin-bottom:40px;
+.search{
+margin:30px;
 }
 
-.search-box input{
+.search input{
+width:300px;
 padding:12px;
-width:280px;
 font-size:16px;
 border-radius:8px;
 border:1px solid #ccc;
@@ -48,169 +42,144 @@ border:1px solid #ccc;
 
 .products{
 display:grid;
-grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
-gap:20px;
-max-width:900px;
+grid-template-columns:repeat(auto-fit,minmax(280px,1fr));
+gap:30px;
+padding:40px;
+max-width:1200px;
 margin:auto;
-margin-bottom:40px;
 }
 
 .card{
 background:white;
-padding:15px;
-border-radius:10px;
-box-shadow:0 2px 10px rgba(0,0,0,0.1);
-position:relative;
+padding:20px;
+border-radius:14px;
+box-shadow:0 6px 18px rgba(0,0,0,0.1);
+transition:0.2s;
 }
 
-.badge{
-position:absolute;
-top:10px;
-left:10px;
-background:#ff3b30;
-color:white;
-padding:4px 10px;
-border-radius:6px;
-font-size:12px;
-font-weight:bold;
+.card:hover{
+transform:scale(1.03);
 }
 
 .card img{
 width:100%;
-border-radius:8px;
+border-radius:10px;
 }
 
 .product-id{
-font-size:14px;
 color:#777;
-margin-top:8px;
+margin-top:10px;
 }
 
 .card h3{
-font-size:18px;
-margin-top:6px;
+margin:10px 0;
 }
 
-.card a{
-display:inline-block;
-margin-top:12px;
-padding:12px 20px;
+.buy{
 background:#28a745;
 color:white;
+padding:12px 25px;
+border-radius:8px;
+display:inline-block;
+margin-top:10px;
 text-decoration:none;
-border-radius:6px;
 font-weight:bold;
 }
 
-.card a:hover{
+.buy:hover{
 background:#1e7e34;
 }
 
-</style>
+.hot-section{
+margin-top:30px;
+}
 
+</style>
 </head>
 
 <body>
 
 <h1 class="brand">Dream<span>Price</span>Deals</h1>
 
-<h2 class="section-title">🔥 Today's Hot Deals</h2>
+<div class="hot-title">🔥 Today's Hot Deals</div>
 
-<div class="products" id="hot-products"></div>
-
-<div class="search-box">
+<div class="search">
 <input type="text" id="search" placeholder="Search by product number or name..." onkeyup="searchProduct()">
 </div>
+
+<div class="products" id="hotProducts"></div>
 
 <div class="products" id="products"></div>
 
 <script>
 
-const sheetURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vROfbcJLOVPvFsrKq8emmhjOXfmh9EDu_G9ypUJfhenaiRgLc4ne4njzAL04Awa4MqncQSO0wTa9t35/pub?output=tsv";
+const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vROfbcJLOVPvFsrKq8emmhjOXfmh9EDu_G9ypUJfhenaiRgLc4ne4njzAL04Awa4MqncQSO0wTa9t35/pub?output=tsv";
 
 let allProducts=[];
-let hotProducts=[];
 
 fetch(sheetURL)
 .then(res=>res.text())
 .then(data=>{
 
-const rows=data.split("\n").slice(1);
+let rows=data.split("\n").slice(1);
+
+let hotHTML="";
+let normalHTML="";
 
 rows.forEach(row=>{
 
-const cols=row.split("\t");
+let cols=row.split("\t");
 
-const id=cols[0];
-const name=cols[1];
-const image=cols[2];
-const link=cols[3];
-const hot=cols[4];
+let id=cols[0];
+let name=cols[1];
+let image=cols[2];
+let link=cols[3];
+let hot=cols[4] ? cols[4].trim().toUpperCase() : "";
 
-const product={id,name,image,link,hot};
-
-allProducts.push(product);
-
-if(hot==="YES"){
-hotProducts.push(product);
-}
-
-});
-
-displayProducts(allProducts,"products");
-displayProducts(hotProducts,"hot-products",true);
-
-});
-
-function displayProducts(products,containerId,hot=false){
-
-const container=document.getElementById(containerId);
-
-container.innerHTML="";
-
-products.forEach(p=>{
-
-const badge=hot? `<div class="badge">HOT</div>`:"";
-
-const productHTML=`
-
-<div class="card">
-
-${badge}
-
-<img src="${p.image}">
-
-<div class="product-id">Product #${p.id}</div>
-
-<h3>${p.name}</h3>
-
-<a href="${p.link}" target="_blank">Click To Buy</a>
-
+let card=`
+<div class="card" data-name="${name}" data-id="${id}">
+<img src="${image}">
+<div class="product-id">Product #${id}</div>
+<h3>${name}</h3>
+<a class="buy" href="${link}" target="_blank">Click To Buy</a>
 </div>
-
 `;
 
-container.innerHTML+=productHTML;
+if(hot==="YES"){
+hotHTML+=card;
+}else{
+normalHTML+=card;
+}
 
 });
 
-}
+document.getElementById("hotProducts").innerHTML=hotHTML;
+document.getElementById("products").innerHTML=normalHTML;
+
+allProducts=document.querySelectorAll(".card");
+
+});
 
 function searchProduct(){
 
-const input=document.getElementById("search").value.toLowerCase();
+let input=document.getElementById("search").value.toLowerCase();
 
-const filtered=allProducts.filter(p =>
-p.name.toLowerCase().includes(input) ||
-p.id.toLowerCase().includes(input)
-);
+allProducts.forEach(product=>{
 
-displayProducts(filtered,"products");
+let name=product.dataset.name.toLowerCase();
+let id=product.dataset.id;
+
+if(name.includes(input) || id.includes(input)){
+product.style.display="block";
+}else{
+product.style.display="none";
+}
+
+});
 
 }
 
 </script>
 
 </body>
-
 </html>
