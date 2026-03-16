@@ -1,30 +1,22 @@
 <!DOCTYPE html>
 <html>
-
 <head>
-
-<title>Find Your Product</title>
-
+<meta charset="UTF-8">
+<title>Trouvez votre produit</title>
 <style>
-
 body{
 font-family:Arial;
 background:#f5f5f5;
 text-align:center;
 padding:60px;
 }
-
-h1{
-font-size:38px;
-}
-
+h1{font-size:38px;}
 input{
 padding:12px;
 font-size:18px;
 width:240px;
 margin-top:20px;
 }
-
 button{
 padding:12px 25px;
 font-size:18px;
@@ -34,86 +26,70 @@ border:none;
 cursor:pointer;
 margin-top:15px;
 }
-
 img{
 margin-top:20px;
-max-width:250px;
+max-width:260px;
 }
-
 </style>
-
 </head>
-
 
 <body>
 
-<h1>Find Your Product</h1>
+<h1>Trouvez votre produit</h1>
+<p>Saisissez le numéro de produit indiqué dans la vidéo.</p>
 
-<p>Enter the product number from the video</p>
-
-<input id="productInput" placeholder="Example: 101">
-
+<input id="productInput" placeholder="Exemple : 101">
 <br>
-
-<button onclick="findProduct()">Find Product</button>
+<button onclick="findProduct()">Trouver un produit</button>
 
 <div id="result"></div>
 
-
 <script>
 
+// URL publiée (TSV)
 const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS2LR2-q7e-c2xs1tfhj7j3c7m2GIEorJSralJYjSlmXLg_ZdxVqZNrJClYcgNwYnTwxSqdkFLHHobG/pub?output=tsv";
-
 
 async function findProduct(){
 
 const input = document.getElementById("productInput").value.trim();
 
-const response = await fetch(sheetURL);
+const res = await fetch(sheetURL);
+const text = await res.text();
 
-const data = await response.text();
+// nettoyer les lignes
+const rows = text.split("\n").map(r => r.trim()).filter(r => r.length>0).slice(1);
 
-const rows = data.split("\n").slice(1);
+for (let row of rows){
 
-for(let row of rows){
+// séparer par tabulation
+const cols = row.split("\t").map(c => c.trim());
 
-const cols = row.split("\t");
-
-const id = cols[0]?.trim();
-const name = cols[1]?.trim();
-const image = cols[2]?.trim();
-const link = cols[3]?.trim();
+const id = cols[0];
+const name = cols[1];
+const image = cols[2];
+const link = cols[3];
 
 if(id === input){
 
-let platform = "Buy Product";
-
-if(link.includes("amazon")) platform = "Click to Buy on Amazon";
-if(link.includes("temu")) platform = "Click to Buy on Temu";
-if(link.includes("alibaba")) platform = "Click to Buy on Alibaba";
-
-document.getElementById("result").innerHTML =
-`
+document.getElementById("result").innerHTML = `
 <h2>${name}</h2>
 <img src="${image}">
 <br><br>
 <a href="${link}" target="_blank">
-<button>${platform}</button>
+<button>Acheter le produit</button>
 </a>
 `;
 
 return;
-
 }
 
 }
 
-document.getElementById("result").innerHTML = "Product not found";
+document.getElementById("result").innerHTML = "Produit introuvable";
 
 }
 
 </script>
 
 </body>
-
 </html>
