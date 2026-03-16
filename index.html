@@ -14,10 +14,34 @@ text-align:center;
 padding:40px;
 }
 
-h1{
-font-size:38px;
+/* HEADER */
+
+.header{
+display:flex;
+align-items:center;
+justify-content:center;
+gap:12px;
 margin-bottom:10px;
 }
+
+.logo{
+width:55px;
+height:55px;
+object-fit:contain;
+}
+
+.brand{
+font-size:40px;
+font-weight:900;
+letter-spacing:1px;
+color:#222;
+}
+
+.brand span{
+color:#28a745;
+}
+
+/* SEARCH */
 
 .search-box{
 margin-bottom:40px;
@@ -30,6 +54,8 @@ font-size:16px;
 border-radius:6px;
 border:1px solid #ccc;
 }
+
+/* PRODUCTS */
 
 .products{
 display:grid;
@@ -83,7 +109,10 @@ background:#1e7e34;
 
 <body>
 
-<h1>DreamPriceDeals</h1>
+<div class="header">
+<img src="logo.png" class="logo">
+<h1 class="brand">Dream<span>Price</span>Deals</h1>
+</div>
 
 <div class="search-box">
 <input type="text" id="search" placeholder="Search by product number or name..." onkeyup="searchProduct()">
