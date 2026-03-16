@@ -35,30 +35,15 @@ cursor:pointer;
 margin-top:15px;
 }
 
-.product{
-margin-top:40px;
-background:white;
-padding:30px;
-border-radius:12px;
-display:none;
-width:320px;
-margin-left:auto;
-margin-right:auto;
-}
-
-.product img{
-width:200px;
-margin-top:10px;
-}
-
-.buy{
-background:#ff4d4d;
-font-size:20px;
+img{
+margin-top:20px;
+max-width:250px;
 }
 
 </style>
 
 </head>
+
 
 <body>
 
@@ -66,95 +51,62 @@ font-size:20px;
 
 <p>Enter the product number from the video</p>
 
-<input id="productNumber" placeholder="Example: 101">
+<input id="productInput" placeholder="Example: 101">
 
 <br>
 
 <button onclick="findProduct()">Find Product</button>
 
-<div id="productBox" class="product">
+<div id="result"></div>
 
-<h2 id="productName"></h2>
-
-<img id="productImage">
-
-<br><br>
-
-<a id="buyLink" target="_blank">
-
-<button id="buyButton" class="buy">Buy Now</button>
-
-</a>
-
-</div>
 
 <script>
 
-const products = {
+const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS2LR2-q7e-c2xs1tfhj7j3c7m2GIEorJSralJYjSlmXLg_ZdxVqZNrJClYcgNwYnTwxSqdkFLHHobG/pub?output=csv";
 
-101:{
-name:"Mini Blender",
-image:"https://via.placeholder.com/200",
-link:"https://www.amazon.com"
-},
+async function findProduct(){
 
-102:{
-name:"Drone Camera",
-image:"https://via.placeholder.com/200",
-link:"https://www.temu.com"
-},
+const input = document.getElementById("productInput").value;
 
-103:{
-name:"Electric Water Gun",
-image:"https://via.placeholder.com/200",
-link:"https://www.aliexpress.com"
-},
+const response = await fetch(sheetURL);
+const data = await response.text();
 
-104:{
-name:"Smart Gadget",
-image:"https://via.placeholder.com/200",
-link:"https://www.alibaba.com"
-}
+const rows = data.split("\n").slice(1);
 
-}
+for(let row of rows){
 
-function detectPlatform(link){
+const cols = row.split(",");
 
-if(link.includes("amazon")) return "Click to Buy on Amazon"
+const id = cols[0];
+const name = cols[1];
+const image = cols[2];
+const link = cols[3];
 
-if(link.includes("temu")) return "Click to Buy on Temu"
+if(id === input){
 
-if(link.includes("aliexpress")) return "Click to Buy on AliExpress"
+let platform = "Buy Product";
 
-if(link.includes("alibaba")) return "Click to Buy on Alibaba"
+if(link.includes("amazon")) platform = "Click to Buy on Amazon";
+if(link.includes("temu")) platform = "Click to Buy on Temu";
+if(link.includes("alibaba")) platform = "Click to Buy on Alibaba";
 
-return "Click to Buy"
+document.getElementById("result").innerHTML =
+`
+<h2>${name}</h2>
+<img src="${image}">
+<br>
+<a href="${link}" target="_blank">
+<button>${platform}</button>
+</a>
+`;
 
-}
-
-function findProduct(){
-
-let number = document.getElementById("productNumber").value
-
-let product = products[number]
-
-if(product){
-
-document.getElementById("productBox").style.display="block"
-
-document.getElementById("productName").innerText = product.name
-
-document.getElementById("productImage").src = product.image
-
-document.getElementById("buyLink").href = product.link
-
-document.getElementById("buyButton").innerText = detectPlatform(product.link)
-
-}else{
-
-alert("Product not found")
+return;
 
 }
+
+}
+
+document.getElementById("result").innerHTML="Product not found";
 
 }
 
