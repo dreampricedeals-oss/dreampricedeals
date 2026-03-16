@@ -21,20 +21,28 @@ display:flex;
 align-items:center;
 justify-content:center;
 gap:12px;
-margin-bottom:10px;
+margin-bottom:20px;
 }
 
 .logo{
-width:55px;
-height:55px;
+width:60px;
+height:60px;
 object-fit:contain;
 }
 
 .brand{
-font-size:40px;
+font-size:42px;
 font-weight:900;
 letter-spacing:1px;
 color:#222;
+display:flex;
+align-items:center;
+gap:10px;
+}
+
+.brand img{
+width:35px;
+height:35px;
 }
 
 .brand span{
@@ -49,9 +57,9 @@ margin-bottom:40px;
 
 .search-box input{
 padding:12px;
-width:260px;
+width:280px;
 font-size:16px;
-border-radius:6px;
+border-radius:8px;
 border:1px solid #ccc;
 }
 
@@ -110,8 +118,14 @@ background:#1e7e34;
 <body>
 
 <div class="header">
+
 <img src="logo.png" class="logo">
-<h1 class="brand">Dream<span>Price</span>Deals</h1>
+
+<h1 class="brand">
+<img src="logo.png">
+Dream<span>Price</span>Deals
+</h1>
+
 </div>
 
 <div class="search-box">
