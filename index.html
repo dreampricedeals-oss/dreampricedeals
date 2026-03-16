@@ -62,7 +62,7 @@ max-width:250px;
 
 <script>
 
-const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS2LR2-q7e-c2xs1tfhj7j3c7m2GIEorJSralJYjSlmXLg_ZdxVqZNrJClYcgNwYnTwxSqdkFLHHobG/pub?output=csv";
+const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS2LR2-q7e-c2xs1tfhj7j3c7m2GIEorJSralJYjSlmXLg_ZdxVqZNrJClYcgNwYnTwxSqdkFLHHobG/pub?output=tsv";
 
 
 async function findProduct(){
@@ -77,7 +77,7 @@ const rows = data.split("\n").slice(1);
 
 for(let row of rows){
 
-const cols = row.split(",");
+const cols = row.split("\t");
 
 const id = cols[0]?.trim();
 const name = cols[1]?.trim();
