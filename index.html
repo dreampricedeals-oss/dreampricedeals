@@ -16,7 +16,19 @@ padding:40px;
 
 h1{
 font-size:38px;
+margin-bottom:10px;
+}
+
+.search-box{
 margin-bottom:40px;
+}
+
+.search-box input{
+padding:12px;
+width:260px;
+font-size:16px;
+border-radius:6px;
+border:1px solid #ccc;
 }
 
 .products{
@@ -39,9 +51,15 @@ width:100%;
 border-radius:8px;
 }
 
+.product-id{
+font-size:14px;
+color:#777;
+margin-top:8px;
+}
+
 .card h3{
 font-size:18px;
-margin-top:10px;
+margin-top:6px;
 }
 
 .card a{
@@ -67,11 +85,17 @@ background:#1e7e34;
 
 <h1>DreamPriceDeals</h1>
 
+<div class="search-box">
+<input type="text" id="search" placeholder="Search by product number or name..." onkeyup="searchProduct()">
+</div>
+
 <div class="products" id="products"></div>
 
 <script>
 
 const sheetURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vROfbcJLOVPvFsrKq8emmhjOXfmh9EDu_G9ypUJfhenaiRgLc4ne4njzAL04Awa4MqncQSO0wTa9t35/pub?output=tsv";
+
+let allProducts=[];
 
 fetch(sheetURL)
 .then(res=>res.text())
@@ -83,25 +107,63 @@ rows.forEach(row=>{
 
 const cols=row.split("\t");
 
+const id=cols[0];
 const name=cols[1];
 const image=cols[2];
 const link=cols[3];
 
-const product=`
+const product={id,name,image,link};
+
+allProducts.push(product);
+
+displayProducts(allProducts);
+
+});
+
+});
+
+function displayProducts(products){
+
+const container=document.getElementById("products");
+
+container.innerHTML="";
+
+products.forEach(p=>{
+
+const productHTML=`
 
 <div class="card">
-<img src="${image}">
-<h3>${name}</h3>
-<a href="${link}" target="_blank">Click To Buy</a>
+
+<img src="${p.image}">
+
+<div class="product-id">Product #${p.id}</div>
+
+<h3>${p.name}</h3>
+
+<a href="${p.link}" target="_blank">Click To Buy</a>
+
 </div>
 
 `;
 
-document.getElementById("products").innerHTML+=product;
+container.innerHTML+=productHTML;
 
 });
 
-});
+}
+
+function searchProduct(){
+
+const input=document.getElementById("search").value.toLowerCase();
+
+const filtered=allProducts.filter(p =>
+p.name.toLowerCase().includes(input) ||
+p.id.toLowerCase().includes(input)
+);
+
+displayProducts(filtered);
+
+}
 
 </script>
 
