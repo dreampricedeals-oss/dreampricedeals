@@ -1,0 +1,22 @@
+{
+ "products":[
+  {
+   "id":"101",
+   "name":"Mini Blender",
+   "image":"https://via.placeholder.com/300",
+   "link":"https://amazon.com"
+  },
+  {
+   "id":"102",
+   "name":"Electric Water Gun",
+   "image":"https://via.placeholder.com/300",
+   "link":"https://temu.com"
+  },
+  {
+   "id":"103",
+   "name":"Smart Drone",
+   "image":"https://via.placeholder.com/300",
+   "link":"https://alibaba.com"
+  }
+ ]
+}
