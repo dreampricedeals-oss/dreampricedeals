@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+
+<title>Find Your Product</title>
+
+<style>
+
+body{
+font-family:Arial;
+background:#f5f5f5;
+text-align:center;
+padding:60px;
+}
+
+h1{
+font-size:38px;
+}
+
+input{
+padding:12px;
+font-size:18px;
+width:240px;
+margin-top:20px;
+}
+
+button{
+padding:12px 25px;
+font-size:18px;
+background:black;
+color:white;
+border:none;
+cursor:pointer;
+margin-top:15px;
+}
+
+.product{
+margin-top:40px;
+background:white;
+padding:30px;
+border-radius:12px;
+display:none;
+width:320px;
+margin-left:auto;
+margin-right:auto;
+}
+
+.product img{
+width:200px;
+margin-top:10px;
+}
+
+.buy{
+background:#ff4d4d;
+font-size:20px;
+}
+
+</style>
+
+</head>
+
+<body>
+
+<h1>Find Your Product</h1>
+
+<p>Enter the product number from the video</p>
+
+<input id="productNumber" placeholder="Example: 101">
+
+<br>
+
+<button onclick="findProduct()">Find Product</button>
+
+<div id="productBox" class="product">
+
+<h2 id="productName"></h2>
+
+<img id="productImage">
+
+<br><br>
+
+<a id="buyLink" target="_blank">
+
+<button id="buyButton" class="buy">Buy Now</button>
+
+</a>
+
+</div>
+
+<script>
+
+const products = {
+
+101:{
+name:"Mini Blender",
+image:"https://via.placeholder.com/200",
+link:"https://www.amazon.com"
+},
+
+102:{
+name:"Drone Camera",
+image:"https://via.placeholder.com/200",
+link:"https://www.temu.com"
+},
+
+103:{
+name:"Electric Water Gun",
+image:"https://via.placeholder.com/200",
+link:"https://www.aliexpress.com"
+},
+
+104:{
+name:"Smart Gadget",
+image:"https://via.placeholder.com/200",
+link:"https://www.alibaba.com"
+}
+
+}
+
+function detectPlatform(link){
+
+if(link.includes("amazon")) return "Click to Buy on Amazon"
+
+if(link.includes("temu")) return "Click to Buy on Temu"
+
+if(link.includes("aliexpress")) return "Click to Buy on AliExpress"
+
+if(link.includes("alibaba")) return "Click to Buy on Alibaba"
+
+return "Click to Buy"
+
+}
+
+function findProduct(){
+
+let number = document.getElementById("productNumber").value
+
+let product = products[number]
+
+if(product){
+
+document.getElementById("productBox").style.display="block"
+
+document.getElementById("productName").innerText = product.name
+
+document.getElementById("productImage").src = product.image
+
+document.getElementById("buyLink").href = product.link
+
+document.getElementById("buyButton").innerText = detectPlatform(product.link)
+
+}else{
+
+alert("Product not found")
+
+}
+
+}
+
+</script>
+
+</body>
+
+</html>
