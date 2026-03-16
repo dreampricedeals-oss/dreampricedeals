@@ -14,35 +14,14 @@ text-align:center;
 padding:40px;
 }
 
-/* HEADER */
-
-.header{
-display:flex;
-align-items:center;
-justify-content:center;
-gap:12px;
-margin-bottom:20px;
-}
-
-.logo{
-width:60px;
-height:60px;
-object-fit:contain;
-}
+/* BRAND */
 
 .brand{
 font-size:42px;
 font-weight:900;
 letter-spacing:1px;
 color:#222;
-display:flex;
-align-items:center;
-gap:10px;
-}
-
-.brand img{
-width:35px;
-height:35px;
+margin-bottom:20px;
 }
 
 .brand span{
@@ -117,16 +96,7 @@ background:#1e7e34;
 
 <body>
 
-<div class="header">
-
-<img src="logo.png" class="logo">
-
-<h1 class="brand">
-<img src="logo.png">
-Dream<span>Price</span>Deals
-</h1>
-
-</div>
+<h1 class="brand">Dream<span>Price</span>Deals</h1>
 
 <div class="search-box">
 <input type="text" id="search" placeholder="Search by product number or name..." onkeyup="searchProduct()">
