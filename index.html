@@ -1,95 +1,100 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="UTF-8">
-<title>Trouvez votre produit</title>
+
+<title>DreamPriceDeals</title>
+
 <style>
+
 body{
 font-family:Arial;
 background:#f5f5f5;
 text-align:center;
-padding:60px;
+padding:40px;
 }
-h1{font-size:38px;}
-input{
-padding:12px;
-font-size:18px;
-width:240px;
-margin-top:20px;
+
+h1{
+font-size:38px;
+margin-bottom:40px;
 }
-button{
-padding:12px 25px;
-font-size:18px;
+
+.products{
+display:grid;
+grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
+gap:20px;
+max-width:900px;
+margin:auto;
+}
+
+.card{
+background:white;
+padding:15px;
+border-radius:10px;
+box-shadow:0 2px 10px rgba(0,0,0,0.1);
+}
+
+.card img{
+width:100%;
+border-radius:8px;
+}
+
+.card a{
+display:inline-block;
+margin-top:10px;
+padding:10px 18px;
 background:black;
 color:white;
-border:none;
-cursor:pointer;
-margin-top:15px;
+text-decoration:none;
+border-radius:6px;
 }
-img{
-margin-top:20px;
-max-width:260px;
-}
+
 </style>
+
 </head>
 
 <body>
 
-<h1>Trouvez votre produit</h1>
-<p>Saisissez le numéro de produit indiqué dans la vidéo.</p>
+<h1>DreamPriceDeals</h1>
 
-<input id="productInput" placeholder="Exemple : 101">
-<br>
-<button onclick="findProduct()">Trouver un produit</button>
-
-<div id="result"></div>
+<div class="products" id="products"></div>
 
 <script>
 
-// URL publiée (TSV)
-const sheetURL = "https://docs.google.com/spreadsheets/d/e/2PACX-1vS2LR2-q7e-c2xs1tfhj7j3c7m2GIEorJSralJYjSlmXLg_ZdxVqZNrJClYcgNwYnTwxSqdkFLHHobG/pub?output=tsv";
+const sheetURL="https://docs.google.com/spreadsheets/d/e/2PACX-1vROfbcJLOVPvFsrKq8emmhjOXfmh9EDu_G9ypUJfhenaiRgLc4ne4njzAL04Awa4MqncQSO0wTa9t35/pub?output=tsv";
 
-async function findProduct(){
+fetch(sheetURL)
+.then(res=>res.text())
+.then(data=>{
 
-const input = document.getElementById("productInput").value.trim();
+const rows=data.split("\n").slice(1);
 
-const res = await fetch(sheetURL);
-const text = await res.text();
+rows.forEach(row=>{
 
-// nettoyer les lignes
-const rows = text.split("\n").map(r => r.trim()).filter(r => r.length>0).slice(1);
+const cols=row.split("\t");
 
-for (let row of rows){
+const name=cols[1];
+const image=cols[2];
+const link=cols[3];
 
-// séparer par tabulation
-const cols = row.split("\t").map(c => c.trim());
+const product=`
 
-const id = cols[0];
-const name = cols[1];
-const image = cols[2];
-const link = cols[3];
-
-if(id === input){
-
-document.getElementById("result").innerHTML = `
-<h2>${name}</h2>
+<div class="card">
 <img src="${image}">
-<br><br>
-<a href="${link}" target="_blank">
-<button>Acheter le produit</button>
-</a>
+<h3>${name}</h3>
+<a href="${link}" target="_blank">View Deal</a>
+</div>
+
 `;
 
-return;
-}
+document.getElementById("products").innerHTML+=product;
 
-}
+});
 
-document.getElementById("result").innerHTML = "Produit introuvable";
-
-}
+});
 
 </script>
 
 </body>
+
 </html>
